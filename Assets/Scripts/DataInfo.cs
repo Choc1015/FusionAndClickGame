@@ -4,5 +4,16 @@ using UnityEngine;
 
 public class DataInfo : Singleton<DataInfo>
 {
-    public int CointCount;
+    public int CoinCount = 0;
+
+    private void Awake()
+    {
+        CoinCount = PlayerPrefs.GetInt("Coin");
+    }
+
+    public void SaveCoin()
+    {
+        PlayerPrefs.SetInt("Coin", CoinCount);
+    }
+
 }

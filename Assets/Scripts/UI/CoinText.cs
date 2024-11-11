@@ -11,6 +11,7 @@ public class CoinText : MonoBehaviour, IUpdatable
     private void OnEnable()
     {
         UpdateManager.Instance?.Register(this);
+        coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
     }
 
     private void OnDisable()
@@ -29,14 +30,18 @@ public class CoinText : MonoBehaviour, IUpdatable
     {
         Coin.OnClikButton -= ViewText;
         Coin.OnClikButton += ViewText;
+
+
     }
     public void OnUpdate()
     {
         //ViewText();
+        
     }
 
     private void ViewText(object sender, EventArgs eventArgs)
     {
-        coinText.text = $"{DataInfo.Instance.CointCount}";
+        DataInfo.Instance.SaveCoin();
+        coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
     }
 }

@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Coin : MonoBehaviour
 {
-    private int coinCount;
     public static event EventHandler OnClikButton;
     
-    private void Awake()
+
+    private void Start()
     {
-        coinCount = DataInfo.Instance.CointCount; 
+        OnClikButton?.Invoke(this, EventArgs.Empty);
     }
 
     public void OnGetCoin()
     {
-        coinCount++;
-        DataInfo.Instance.CointCount = coinCount;
-
+        DataInfo.Instance.CoinCount++;
+        
         OnClikButton?.Invoke(this, EventArgs.Empty);
     }
 
