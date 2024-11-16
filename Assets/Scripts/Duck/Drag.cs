@@ -1,15 +1,25 @@
 
 using UnityEngine;
 
-public class Drag : MonoBehaviour,IUpdatable
+public class Drag : MonoBehaviour, IUpdatable
 {
-    [SerializeField] GameObject nextDuck;
+    [SerializeField] GameObject NextDuck;
+
+    public int nextDuck = 0;
+    private SpriteRenderer spriteRenderer;
     private bool dragging = false;
     private Vector3 offset;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     private void OnEnable()
     {
         UpdateManager.Instance?.Register(this);
+        gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
+        gameObject.GetComponent<Drag>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
     }
 
     private void OnDisable()
@@ -30,26 +40,29 @@ public class Drag : MonoBehaviour,IUpdatable
         dragging = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == gameObject.name && dragging)
-        {
-            Debug.Log("병합!");
-            ObjectPoolManager.Instance.SpawnFromPool(nextDuck.name, collision.transform.position);
-            collision.gameObject.SetActive(false);
-            gameObject.SetActive(false);
-        }
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == gameObject.name && dragging)
+        if(dragging && collision.gameObject.CompareTag("Duck"))
         {
-            Debug.Log("병합!");
-            ObjectPoolManager.Instance.SpawnFromPool(nextDuck.name, collision.transform.position);
-            collision.gameObject.SetActive(false);
-            gameObject.SetActive(false);
+            if (collision.gameObject.GetComponent<Drag>().nextDuck == nextDuck)
+            {
+                Debug.Log("병합!");
+                nextDuck++;
+                dragging = false;
+                spriteRenderer.sprite = SpawnManager.Instance.DuckImage[nextDuck];
+                gameObject.transform.position = (gameObject.transform.position + collision.transform.position) / 2f;
+                collision.gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
+                collision.gameObject.GetComponent<Drag>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
+                ObjectPoolManager.Instance.DeSpawnToPool(collision.gameObject.name, collision.gameObject);
+            }
         }
+
+        if (dragging && collision.gameObject.CompareTag("Wall"))
+        {
+            dragging = false;
+        }
+        
     }
 
     public void OnUpdate()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class DataInfo : Singleton<DataInfo>
 {
     public int CoinCount = 0;
-
+    public int SpawnDuckLevel = 0;
     private void Awake()
     {
         CoinCount = PlayerPrefs.GetInt("Coin");

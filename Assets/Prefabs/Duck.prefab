@@ -100,7 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4487d3ab753b02e4cac0ea4c4c2c85e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextDuck: {fileID: 1551891249013455059, guid: 77bed5b7c58df0b4b87eb7be794ba1e1, type: 3}
+  NextDuck: {fileID: 0}
+  nextDuck: 0
 --- !u!58 &2013071901416431617
 CircleCollider2D:
   m_ObjectHideFlags: 0
