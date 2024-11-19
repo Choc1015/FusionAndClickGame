@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CanvasController : MonoBehaviour
@@ -18,4 +19,12 @@ public class CanvasController : MonoBehaviour
         lastCanvas.SetActive(true);
     }
     
+    public void OpenPopup(GameObject clickedCanvas)
+    {
+        clickedCanvas.SetActive(true);
+    }
+    public void ClosedPopup(GameObject clickedCanvas)
+    {
+        clickedCanvas.SetActive(false);
+    }
 }

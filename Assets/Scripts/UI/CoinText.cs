@@ -6,19 +6,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CoinText : MonoBehaviour, IUpdatable
+public class CoinText : MonoBehaviour
 {
     private void OnEnable()
     {
-        UpdateManager.Instance?.Register(this);
         coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
     }
 
-    private void OnDisable()
-    {
-        UpdateManager.Instance?.Unregister(this);
-    }
-
+    
     private TMP_Text coinText;
 
     private void Awake()
@@ -33,13 +28,7 @@ public class CoinText : MonoBehaviour, IUpdatable
 
 
     }
-    public void OnUpdate()
-    {
-        //ViewText();
-        
-    }
-
-    private void ViewText(object sender, EventArgs eventArgs)
+      private void ViewText(object sender, EventArgs eventArgs)
     {
         DataInfo.Instance.SaveCoin();
         coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
