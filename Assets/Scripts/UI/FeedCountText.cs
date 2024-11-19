@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DuckCountText : MonoBehaviour, IUpdatable
+public class FeedCountText : MonoBehaviour,IUpdatable
 {
-    private Text duckCountText;
+    private Text duckFeedText;
 
     private void Awake()
     {
-        duckCountText = GetComponent<Text>();   
+        duckFeedText = GetComponent<Text>();
     }
 
     private void OnEnable()
@@ -24,6 +24,6 @@ public class DuckCountText : MonoBehaviour, IUpdatable
 
     public void OnUpdate()
     {
-        duckCountText.text = $"{DataInfo.Instance.CurrentDuckCount}/{DataInfo.Instance.MaxDuckCount}";
+        duckFeedText.text = $"{DataInfo.Instance.CurrentFeedCount}/{DataInfo.Instance.MaxFeedCount}";
     }
 }

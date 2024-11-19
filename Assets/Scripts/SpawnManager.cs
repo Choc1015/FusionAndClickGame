@@ -6,20 +6,26 @@ using UnityEngine.UI;
 
 public class SpawnManager : Singleton<SpawnManager>
 {
-    [SerializeField] GameObject CurrentDuck;
+    [SerializeField] GameObject CurrentDuckCount;
     [SerializeField] GameObject NewDuckCanvas;
     [SerializeField] RawImage NewDuckImage;
     [SerializeField] Text NewDuckText;
 
     public Sprite[] DuckImage;
-    
 
     public void SpawnDuck()
     {
-        if (DataInfo.Instance.CurrentDuck < DataInfo.Instance.MaxDuckCount )
+        if (DataInfo.Instance.CurrentFeedCount <= 0)
         {
-            DataInfo.Instance.CurrentDuck++;
-            ObjectPoolManager.Instance.SpawnFromPool(CurrentDuck.name);
+            Debug.Log("먹이가 없습니다!");
+            return;
+        }
+
+        if (DataInfo.Instance.CurrentDuckCount < DataInfo.Instance.MaxDuckCount )
+        {
+            DataInfo.Instance.CurrentDuckCount++;
+            ObjectPoolManager.Instance.SpawnFromPool(CurrentDuckCount.name);
+            DataInfo.Instance.CurrentFeedCount--;
         }
 
     }
@@ -36,5 +42,9 @@ public class SpawnManager : Singleton<SpawnManager>
         NewDuckCanvas.SetActive(true);
     }
 
-
+    public void UpgradeFeed()
+    {
+        DataInfo.Instance.delayTime = 10 - (DataInfo.Instance.FeedTimeLevel * 0.3f);
+        DataInfo.Instance.FeedTimeLevel++;
+    }
 }

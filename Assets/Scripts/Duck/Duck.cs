@@ -69,7 +69,7 @@ public class Duck : MonoBehaviour, IUpdatable
                 collision.gameObject.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
                 ObjectPoolManager.Instance.DeSpawnToPool(collision.gameObject.name, collision.gameObject);
                 CheckNewDuck();
-                DataInfo.Instance.CurrentDuck--;
+                DataInfo.Instance.CurrentDuckCount--;
             }
         }
     }
