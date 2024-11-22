@@ -12,7 +12,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         public int size; // 어느정도 풀링할 건지
     }
 
-    const float xSize = 5;
+    const float xSize = 4.5f;
     const float yMaxSize = 7.4f;
     const float yMinSize = 4.7f;
 

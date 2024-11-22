@@ -18,7 +18,6 @@ public class TimeFeed : MonoBehaviour, IUpdatable
 
     public void OnUpdate()
     {
-        Debug.Log($"{DataInfo.Instance.CurrentFeedCount},{DataInfo.Instance.MaxFeedCount}");
         if(DataInfo.Instance.CurrentFeedCount != DataInfo.Instance.MaxFeedCount)
         currentTime += Time.deltaTime;
 
