@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Duck : MonoBehaviour, IUpdatable
 {
-    [SerializeField] GameObject NextDuck;
-
     public int nextDuck = 0;
     private SpriteRenderer spriteRenderer;
     private bool Dragging = false;
@@ -61,8 +59,21 @@ public class Duck : MonoBehaviour, IUpdatable
             if (collision.gameObject.GetComponent<Duck>().nextDuck == nextDuck)
             {
                 Debug.Log("병합!");
+
+                // 합쳐서 클릭당과 초당 값 감소
+                int ClickCoint = (int)Mathf.Pow(1.5f, nextDuck + 1) * 2;
+                DataInfo.Instance.ClickDuckCoin -= ClickCoint;
+                DataInfo.Instance.PerSecondCoin -= ClickCoint * 2;
+
                 nextDuck++;
                 Dragging = false;
+
+                // 증가된 레벨에 따른 값 증가
+                ClickCoint = (int)Mathf.Pow(1.5f, nextDuck + 1);
+                DataInfo.Instance.ClickDuckCoin += ClickCoint;
+                DataInfo.Instance.PerSecondCoin += ClickCoint * 2;
+
+                // 합치는 기능
                 spriteRenderer.sprite = SpawnManager.Instance.DuckImage[nextDuck];
                 gameObject.transform.position = (gameObject.transform.position + collision.transform.position) / 2f;
                 collision.gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
@@ -78,10 +89,12 @@ public class Duck : MonoBehaviour, IUpdatable
     {
         if (nextDuck - 1 == DataInfo.Instance.NewDucklevel)
         {
+            Debug.Log($"새로운 오리 {nextDuck - 1}, {DataInfo.Instance.NewDucklevel}");
+
             DataInfo.Instance.NewDucklevel++;
             SpawnManager.Instance.ChangeCanvas();
         }
-
+        
         Debug.Log($"{nextDuck}, {DataInfo.Instance.NewDucklevel}");
 
     }

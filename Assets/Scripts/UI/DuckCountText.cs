@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class DuckCountText : MonoBehaviour, IUpdatable
 {
-    private Text duckCountText;
+    private TextMeshProUGUI duckCountText;
 
     private void Awake()
     {
-        duckCountText = GetComponent<Text>();   
+        duckCountText = GetComponent<TextMeshProUGUI>();
     }
 
-    private void OnEnable()
+    private void OnEnable() 
     {
         UpdateManager.Instance?.Register(this);
     }
@@ -24,6 +24,6 @@ public class DuckCountText : MonoBehaviour, IUpdatable
 
     public void OnUpdate()
     {
-        duckCountText.text = $"{DataInfo.Instance.CurrentDuckCount}/{DataInfo.Instance.MaxDuckCount}";
+        duckCountText.text = $"{DataInfo.Instance.CurrentDuckCount} / {DataInfo.Instance.MaxDuckCount}";
     }
 }

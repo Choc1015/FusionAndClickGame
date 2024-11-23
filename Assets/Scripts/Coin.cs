@@ -14,7 +14,7 @@ public class Coin : MonoBehaviour
 
     public void OnGetCoin()
     {
-        DataInfo.Instance.CoinCount++;
+        DataInfo.Instance.CoinCount += DataInfo.Instance.ClickDuckCoin;
         
         OnClikButton?.Invoke(this, EventArgs.Empty);
     }
