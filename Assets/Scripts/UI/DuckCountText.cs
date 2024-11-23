@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class DuckCountText : MonoBehaviour, IUpdatable
+public class DuckCountText : MonoBehaviour, IUpdatable  
 {
     private TextMeshProUGUI duckCountText;
 

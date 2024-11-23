@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class FeedCountText : MonoBehaviour,IUpdatable
+public class ClickCountText : MonoBehaviour, IUpdatable
 {
-    private TextMeshProUGUI duckFeedText;
+    private TextMeshProUGUI ClickCoinText;
 
     private void Awake()
     {
-        duckFeedText = GetComponent<TextMeshProUGUI>();
+        ClickCoinText = GetComponent<TextMeshProUGUI>();
     }
 
     private void OnEnable()
@@ -24,6 +24,6 @@ public class FeedCountText : MonoBehaviour,IUpdatable
 
     public void OnUpdate()
     {
-        duckFeedText.text = $"({DataInfo.Instance.CurrentFeedCount}/{DataInfo.Instance.MaxFeedCount})";
+        ClickCoinText.text = $"+ {NumberFormatter.FormatLargeNumberWithTwoUnits(DataInfo.Instance.ClickDuckCoin)}";
     }
 }

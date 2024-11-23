@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class CoinText : MonoBehaviour
 {
     private void OnEnable()
     {
-        coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
+        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
     }
 
     
@@ -31,6 +32,6 @@ public class CoinText : MonoBehaviour
       private void ViewText(object sender, EventArgs eventArgs)
     {
         DataInfo.Instance.SaveCoin();
-        coinText.text = $"{PlayerPrefs.GetInt("Coin")}";
+        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
     }
 }

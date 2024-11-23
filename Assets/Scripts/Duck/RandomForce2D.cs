@@ -8,7 +8,9 @@ public class RandomForce2D : MonoBehaviour
     public float minInterval = 5f; // 최소 간격 (초)
     public float maxInterval = 10f; // 최대 간격 (초)
 
+
     private Rigidbody2D rb;
+    private float scaleValue = 1.8f;
 
     private void Start()
     {
@@ -29,6 +31,15 @@ public class RandomForce2D : MonoBehaviour
             // 랜덤 힘과 방향 계산
             float force = Random.Range(minForce, maxForce);
             Vector2 direction = Random.insideUnitCircle.normalized;
+            Debug.Log(direction);
+            if (direction.x > 0)
+            {
+                transform.localScale = new Vector3(-scaleValue, scaleValue, scaleValue);
+            }
+            else if (direction.x <= 0) 
+            {
+                transform.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
+            }
             rb.AddForce(direction * force, ForceMode2D.Impulse);
             yield return new WaitForSeconds(0.5f);
             rb.velocity = Vector2.zero;

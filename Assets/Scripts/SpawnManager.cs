@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] GameObject CurrentDuck;
     [SerializeField] GameObject NewDuckCanvas;
     [SerializeField] RawImage NewDuckImage;
-    [SerializeField] Text NewDuckText;
+    [SerializeField] TextMeshProUGUI NewDuckText;
 
     public Sprite[] DuckImage;
 
@@ -70,7 +71,7 @@ public class SpawnManager : Singleton<SpawnManager>
     public void ChangeCanvas()
     {
         NewDuckImage.texture = DuckImage[DataInfo.Instance.NewDucklevel].texture;
-        NewDuckText.text = DuckImage[DataInfo.Instance.NewDucklevel].name + "!!";
+        NewDuckText.text = $"'{DuckImage[DataInfo.Instance.NewDucklevel].name}'를 발견했다!";
         NewDuckCanvas.SetActive(true);
     }
 
