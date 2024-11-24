@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
+    public GameObject hideBox;
     [System.Serializable] // 클래스를 직렬화 시키는 법, 이전 정보를 저장해줌
     public class Pool // 풀링할 오브젝트
     {
@@ -35,12 +36,12 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         foreach (Pool pool in pools) // 많은 풀링 돌리기
         {
             Queue<GameObject> objectPool = new Queue<GameObject>(); // 큐 객체 생성
-            GameObject fileObject = new GameObject("@" + pool.tag); // 풀링된 오브젝트를 깔끔하게 보이게 하기 위해 빈오브젝트에서 관리
+            
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab); // 풀링된 오브젝트 생성
                 obj.name = pool.prefab.name;
-                obj.transform.SetParent(fileObject.transform); // 생성해서 폴더(빈옵젝) 안에 저장 
+                obj.transform.SetParent(hideBox.transform); // 생성해서 폴더(빈옵젝) 안에 저장 
                 obj.SetActive(false); // 비활성화 시켜놓기
                 objectPool.Enqueue(obj); // 큐에 데이터 저장
             }

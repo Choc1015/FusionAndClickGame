@@ -12,11 +12,17 @@ public class RandomForce2D : MonoBehaviour
     private Rigidbody2D rb;
     private float scaleValue = 1.8f;
 
-    private void Start()
+    private void OnEnable()
     {
         rb = GetComponent<Rigidbody2D>();
         StartCoroutine(ApplyRandomForce());
     }
+
+    //private void Start()
+    //{
+    //    rb = GetComponent<Rigidbody2D>();
+    //    StartCoroutine(ApplyRandomForce());
+    //}
 
     private IEnumerator ApplyRandomForce()
     {

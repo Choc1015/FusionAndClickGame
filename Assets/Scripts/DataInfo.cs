@@ -22,6 +22,7 @@ public class DataInfo : Singleton<DataInfo>
 
     public float delayTime = 10f;
 
+    public bool IsGame { get; set; }
 
     public string ClickDuckCoinString = "0"; // string으로 변환하여 표시
     public string PerSecondCoinString = "0"; // string으로 변환하여 표시

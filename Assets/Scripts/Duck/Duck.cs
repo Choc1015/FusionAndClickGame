@@ -18,8 +18,11 @@ public class Duck : MonoBehaviour, IUpdatable
     private void OnEnable()
     {
         UpdateManager.Instance?.Register(this);
-        gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
-        gameObject.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
+        if (!DataInfo.Instance.IsGame)
+        {   
+            gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
+            gameObject.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
+        }
     }
 
     private void OnDisable()

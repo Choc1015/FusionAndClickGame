@@ -14,6 +14,18 @@ public class CanvasController : MonoBehaviour
             Debug.LogError(" 캔버스를 찾을 수 없습니다!");
         }
 
+        if(clickedCanvas.name == "강화")
+        {
+            DataInfo.Instance.IsGame = true;
+            ObjectPoolManager.Instance.hideBox.SetActive(true);
+            Debug.Log(DataInfo.Instance.IsGame);
+        }
+        else
+        {
+            DataInfo.Instance.IsGame = false;
+           ObjectPoolManager.Instance.hideBox.SetActive(false);
+        }
+
         lastCanvas.SetActive(false);
         lastCanvas = clickedCanvas;
         lastCanvas.SetActive(true);
