@@ -2,6 +2,14 @@
 using System;
 using UnityEngine;
 
+[System.Serializable]
+public class DuckData
+{
+    public int NextDuck;
+    public string SpriteName; // Sprite의 이름을 저장
+    public Vector3 Position; // 위치 저장
+}
+
 public class Duck : MonoBehaviour, IUpdatable
 {
     public int nextDuck = 0;
@@ -32,6 +40,11 @@ public class Duck : MonoBehaviour, IUpdatable
 
     private void OnMouseDown()
     {
+        if (!DataInfo.Instance.IsGame)
+        {
+            Debug.Log("못 움직임 ㅅㄱ");
+            return;
+        }
         // Record the difference between the objects centre, and the clicked point on the camera plane.
         offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Dragging = true;

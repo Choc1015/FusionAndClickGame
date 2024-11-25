@@ -12,7 +12,7 @@ public class CoinText : MonoBehaviour,IUpdatable
     private void OnEnable()
     {
         UpdateManager.Instance?.Register(this);
-        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
+        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("CoinCount")))}";
     }
     private void OnDisable()
     {
@@ -28,8 +28,7 @@ public class CoinText : MonoBehaviour,IUpdatable
 
     private void ViewText()
     {
-        DataInfo.Instance.SaveCoin();
-        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
+        coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("CoinCount")))}";
     }
 
     public void OnUpdate()

@@ -16,7 +16,8 @@ public class SpawnManager : Singleton<SpawnManager>
 
     private void Start()
     {
-        SpawnDuck();
+        if (DataInfo.Instance.CurrentDuckCount == 0)
+            SpawnDuck();
     }
 
     public void SpawnDuck()
@@ -29,12 +30,14 @@ public class SpawnManager : Singleton<SpawnManager>
             return;
         }
 
-       
 
-        if (DataInfo.Instance.CurrentDuckCount < DataInfo.Instance.MaxDuckCount )
+
+        if (DataInfo.Instance.CurrentDuckCount < DataInfo.Instance.MaxDuckCount)
         {
             DataInfo.Instance.CurrentDuckCount++;
             crDuck = ObjectPoolManager.Instance.SpawnFromPool(CurrentDuck.name);
+            crDuck.GetComponent<SpriteRenderer>().sprite = DuckImage[DataInfo.Instance.SpawnDuckLevel];
+            crDuck.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
             DataInfo.Instance.CurrentFeedCount--;
         }
         else
@@ -43,7 +46,7 @@ public class SpawnManager : Singleton<SpawnManager>
             return;
         }
 
-        if(crDuck == null)
+        if (crDuck == null)
         {
             Debug.LogError("뭔가 이상해");
         }
@@ -56,9 +59,13 @@ public class SpawnManager : Singleton<SpawnManager>
 
     }
 
-    public void ChangeSprite()
+    public void UpgradeDuck()
     {
-        if(DataInfo.Instance.NewDucklevel > DataInfo.Instance.SpawnDuckLevel)
+        if (DataInfo.Instance.CoinCount < DataInfo.Instance.SpawnDuckCost)
+            return;
+        DataInfo.Instance.CoinCount -= DataInfo.Instance.SpawnDuckCost;
+
+        if (DataInfo.Instance.NewDucklevel > DataInfo.Instance.SpawnDuckLevel)
         {
             DataInfo.Instance.SpawnDuckLevel++;
         }
@@ -75,9 +82,31 @@ public class SpawnManager : Singleton<SpawnManager>
         NewDuckCanvas.SetActive(true);
     }
 
-    public void UpgradeFeed()
+    //먹이 업그레이드
+    public void UpgradeFeedTime()
     {
+        if (DataInfo.Instance.CoinCount < DataInfo.Instance.FeedTimeCost)
+            return;
+        DataInfo.Instance.CoinCount -= DataInfo.Instance.FeedTimeCost;
         DataInfo.Instance.delayTime = 10 - (DataInfo.Instance.FeedTimeLevel * 0.3f);
         DataInfo.Instance.FeedTimeLevel++;
     }
+    public void UpgradeDuckCount()
+    {
+        if (DataInfo.Instance.CoinCount < DataInfo.Instance.DuckCountCost)
+            return;
+        DataInfo.Instance.CoinCount -= DataInfo.Instance.DuckCountCost;
+        DataInfo.Instance.DuckCountLevel++;
+        DataInfo.Instance.MaxDuckCount ++;
+    }
+
+    public void UpgradeFeedCount()
+    {
+        if (DataInfo.Instance.CoinCount < DataInfo.Instance.FeedCountCost)
+            return;
+        DataInfo.Instance.CoinCount -= DataInfo.Instance.FeedCountCost;
+        DataInfo.Instance.FeedCountLevel++;
+        DataInfo.Instance.MaxFeedCount ++;
+    }
+
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using UnityEngine;
 
@@ -14,16 +15,19 @@ public class CanvasController : MonoBehaviour
             Debug.LogError(" 캔버스를 찾을 수 없습니다!");
         }
 
-        if(clickedCanvas.name == "강화")
+        DataInfo.SaveDuck();
+
+        if (clickedCanvas.name == "강화")
         {
             DataInfo.Instance.IsGame = true;
-            ObjectPoolManager.Instance.hideBox.SetActive(true);
+            //ObjectPoolManager.Instance.hideBox.SetActive(true);
             Debug.Log(DataInfo.Instance.IsGame);
         }
         else
         {
+            //DataInfo.SaveDuck();
             DataInfo.Instance.IsGame = false;
-           ObjectPoolManager.Instance.hideBox.SetActive(false);
+            //ObjectPoolManager.Instance.hideBox.SetActive(false);
         }
 
         lastCanvas.SetActive(false);
