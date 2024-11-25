@@ -7,14 +7,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CoinText : MonoBehaviour
+public class CoinText : MonoBehaviour,IUpdatable
 {
     private void OnEnable()
     {
+        UpdateManager.Instance?.Register(this);
         coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
     }
+    private void OnDisable()
+    {
+        UpdateManager.Instance?.Unregister(this);
+    }
 
-    
     private TMP_Text coinText;
 
     private void Awake()
@@ -22,16 +26,14 @@ public class CoinText : MonoBehaviour
         coinText = GetComponent<TMP_Text>();
     }
 
-    private void Start()
-    {
-        Coin.OnClikButton -= ViewText;
-        Coin.OnClikButton += ViewText;
-
-
-    }
-      private void ViewText(object sender, EventArgs eventArgs)
+    private void ViewText()
     {
         DataInfo.Instance.SaveCoin();
         coinText.text = $"{NumberFormatter.FormatLargeNumberWithTwoUnits(decimal.Parse(PlayerPrefs.GetString("Coin")))}";
+    }
+
+    public void OnUpdate()
+    {
+        ViewText();
     }
 }
