@@ -156,8 +156,6 @@ public class Duck : MonoBehaviour, IUpdatable
                 CheckNewDuck();
                 DataInfo.Instance.CurrentDuckCount--;
             }
-            DataInfo.Instance.SaveData();
-            DataInfo.Instance.SaveDuckData(DataInfo.duckList);
         }
     }
 
