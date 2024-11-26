@@ -27,7 +27,7 @@ public class Duck : MonoBehaviour, IUpdatable
     {
         UpdateManager.Instance?.Register(this);
         if (!DataInfo.Instance.IsGame)
-        {   
+        {
             gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
             gameObject.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
         }
@@ -45,15 +45,35 @@ public class Duck : MonoBehaviour, IUpdatable
             Debug.Log("못 움직임 ㅅㄱ");
             return;
         }
+
+
         // Record the difference between the objects centre, and the clicked point on the camera plane.
         offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Dragging = true;
+        DataInfo.Instance.IsDrag = Dragging;
+    }
+
+    private void OnMouseOver()
+    {
+
     }
 
     private void OnMouseUp()
     {
         // Stop Duckging.
         Dragging = false;
+        DataInfo.Instance.IsDrag = Dragging;
+
+        if (DataInfo.Instance.IsTrash)
+        {
+            DeleteDuck();
+        }
+
+        if (!IsInRange(gameObject.transform.position.x, -5, 5) || !IsInRange(gameObject.transform.position.y, -4, 8))
+        {
+            gameObject.transform.position = ObjectPoolManager.Instance.RandomSpawn();
+        }
+
     }
 
 
@@ -61,21 +81,59 @@ public class Duck : MonoBehaviour, IUpdatable
     {
         FusionDuck(collision);
 
-        if (Dragging && collision.gameObject.CompareTag("Wall"))
+        if (Dragging && collision.gameObject.CompareTag("Wall")&& !DataInfo.Instance.IsTrash)
         {
             Dragging = false;
         }
 
     }
 
+    private void DeleteDuck()
+    {
+        int ClickCoint = (int)Mathf.Pow(1.5f, nextDuck + 1);
+        DataInfo.Instance.ClickDuckCoin -= ClickCoint;
+        DataInfo.Instance.PerSecondCoin -= ClickCoint * 2;
+        gameObject.GetComponent<SpriteRenderer>().sprite = SpawnManager.Instance.DuckImage[DataInfo.Instance.SpawnDuckLevel];
+        gameObject.GetComponent<Duck>().nextDuck = DataInfo.Instance.SpawnDuckLevel;
+        ObjectPoolManager.Instance.DeSpawnToPool(gameObject.name, gameObject);
+        DataInfo.Instance.CurrentDuckCount--;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Debug.Log("들어와있는중");
+
+        if (Dragging && collision.gameObject.CompareTag("Wall"))
+        {
+            //Dragging = false;
+        }
+        //if(!Dragging && collision.gameObject.CompareTag("Wall") && !DataInfo.Instance.IsTrash)
+        //{
+            
+        //}
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+
+        Debug.Log("나가는중");
+
+        if (Dragging && collision.gameObject.CompareTag("Wall"))
+        {
+            gameObject.transform.position = Vector3.zero;
+        }
+    }
+
     private void FusionDuck(Collision2D collision)
     {
         if (Dragging && collision.gameObject.CompareTag("Duck"))
         {
+            
+
             if (collision.gameObject.GetComponent<Duck>().nextDuck == nextDuck)
             {
                 Debug.Log("병합!");
-
+                AudioManager.Instance.PlayDuckSound();
                 // 합쳐서 클릭당과 초당 값 감소
                 int ClickCoint = (int)Mathf.Pow(1.5f, nextDuck + 1) * 2;
                 DataInfo.Instance.ClickDuckCoin -= ClickCoint;
@@ -110,7 +168,7 @@ public class Duck : MonoBehaviour, IUpdatable
             DataInfo.Instance.NewDucklevel++;
             SpawnManager.Instance.ChangeCanvas();
         }
-        
+
         Debug.Log($"{nextDuck}, {DataInfo.Instance.NewDucklevel}");
 
     }
@@ -121,7 +179,21 @@ public class Duck : MonoBehaviour, IUpdatable
         {
             // Move object, taking into account original offset.
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
+
+           
+
         }
+
+        
+
+
     }
+    public bool IsInRange(float x, float min, float max)
+    {
+        return x >= min && x <= max;
+    }
+
+
+
 }
 

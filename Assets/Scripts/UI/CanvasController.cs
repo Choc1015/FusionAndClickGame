@@ -4,9 +4,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using UnityEngine;
 
-public class CanvasController : MonoBehaviour
+public class CanvasController : MonoBehaviour,IUpdatable
 {
     [SerializeField] GameObject lastCanvas;
+
+    private void OnEnable()
+    {
+        UpdateManager.Instance?.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        UpdateManager.Instance?.Unregister(this);
+    }
 
     public void ChangeCanvas(GameObject clickedCanvas)
     {
@@ -34,6 +44,7 @@ public class CanvasController : MonoBehaviour
         lastCanvas = clickedCanvas;
         lastCanvas.SetActive(true);
     }
+
     
     public void OpenPopup(GameObject clickedCanvas)
     {
@@ -42,5 +53,14 @@ public class CanvasController : MonoBehaviour
     public void ClosedPopup(GameObject clickedCanvas)
     {
         clickedCanvas.SetActive(false);
+    }
+
+    public void OnUpdate()
+    {
+        if (lastCanvas.name == "°­È­")
+        {
+            DataInfo.Instance.IsGame = true;
+        }
+         
     }
 }

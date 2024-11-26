@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DataInfo : Singleton<DataInfo>
+public class DataInfo : Singleton<DataInfo>, IUpdatable
 {
     // 코인
     public decimal CoinCount = 0;
@@ -26,6 +26,9 @@ public class DataInfo : Singleton<DataInfo>
     public float delayTime = 10f;
 
     public bool IsGame { get; set; }
+    public bool IsDrag { get; set; }
+    public bool IsTrash { get; set; }   
+    public bool IsDuckSound { get; set; }
 
     public string ClickDuckCoinString = "0"; // string으로 변환하여 표시
     public string PerSecondCoinString = "0"; // string으로 변환하여 표시
@@ -37,6 +40,15 @@ public class DataInfo : Singleton<DataInfo>
     public decimal DuckCountCost = 0;
     public decimal FeedCountCost = 0;
 
+    private void OnEnable()
+    {
+        UpdateManager.Instance?.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        UpdateManager.Instance?.Unregister(this);
+    }
 
 
     // Inspector에서 ClickDuckCoin을 보기 위한 프로퍼티
@@ -69,21 +81,20 @@ public class DataInfo : Singleton<DataInfo>
 
     private void Awake()
     {
-        //ResetData();
-        duckList = DataInfo.Instance.LoadDuckData();
+        ResetData();
         LoadData();
+        duckList = DataInfo.Instance.LoadDuckData();
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         SaveData();
         LoadData();
 
-        SpawnDuckCost = (decimal)(Math.Pow(2.5,DataInfo.Instance.SpawnDuckLevel) * 10000);
-        FeedTimeCost = (decimal)Math.Pow(10, (0.373f * (DataInfo.Instance.FeedTimeLevel-1)) + 2);
+        SpawnDuckCost = (decimal)(Math.Pow(2.5, DataInfo.Instance.SpawnDuckLevel) * 10000);
+        FeedTimeCost = (decimal)Math.Pow(10, (0.373f * (DataInfo.Instance.FeedTimeLevel - 1)) + 2);
         DuckCountCost = (decimal)Math.Pow(10, (0.358f * (DataInfo.Instance.DuckCountLevel)) + 2);
         FeedCountCost = (decimal)Math.Pow(10, (0.587f * (DataInfo.Instance.FeedCountLevel)) + 2);
-
     }
 
     public void SaveData()
@@ -225,5 +236,6 @@ public class DataInfo : Singleton<DataInfo>
 
         return ducks;
     }
+
 
 }
