@@ -81,7 +81,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
 
     private void Awake()
     {
-        ResetData();
+        //ResetData();
         LoadData();
         duckList = DataInfo.Instance.LoadDuckData();
     }
@@ -89,7 +89,9 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
     public void OnUpdate()
     {
         SaveData();
+        SaveDuck();
         LoadData();
+
 
         SpawnDuckCost = (decimal)(Math.Pow(2.5, DataInfo.Instance.SpawnDuckLevel) * 10000);
         FeedTimeCost = (decimal)Math.Pow(10, (0.373f * (DataInfo.Instance.FeedTimeLevel - 1)) + 2);
@@ -136,6 +138,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
     private void OnApplicationQuit()
     {
         SaveData(); // 게임 종료 시 데이터 저장
+        SaveDuck();
     }
 
     public static void SaveDuck()
@@ -149,6 +152,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         if (pause)
         {
             SaveData(); // 앱이 일시 정지되었을 때 데이터 저장
+            SaveDuck(); 
         }
     }
     public void ResetData()
