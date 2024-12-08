@@ -3,6 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
+public class GameData
+{
+    public decimal CoinCount;
+    public int SpawnDuckLevel;
+    public int FeedTimeLevel;
+    public int NewDucklevel;
+    public int DuckCountLevel;
+    public int FeedCountLevel;
+    public int MaxDuckCount = 8;
+    public int CurrentDuckCount = 0;
+    public float delayTime = 10f;
+}
+
 public class DataInfo : Singleton<DataInfo>, IUpdatable
 {
     // ÄÚÀÎ
@@ -88,15 +102,18 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
 
     public void OnUpdate()
     {
-        SaveData();
-        SaveDuck();
-        LoadData();
-
 
         SpawnDuckCost = (decimal)(Math.Pow(2.5, DataInfo.Instance.SpawnDuckLevel) * 10000);
         FeedTimeCost = (decimal)Math.Pow(10, (0.373f * (DataInfo.Instance.FeedTimeLevel - 1)) + 2);
         DuckCountCost = (decimal)Math.Pow(10, (0.358f * (DataInfo.Instance.DuckCountLevel)) + 2);
         FeedCountCost = (decimal)Math.Pow(10, (0.587f * (DataInfo.Instance.FeedCountLevel)) + 2);
+    }
+
+    public void AllDataRoading()
+    {
+        SaveData();
+        SaveDuck();
+        LoadData();
     }
 
     public void SaveData()

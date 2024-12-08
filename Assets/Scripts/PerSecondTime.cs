@@ -23,6 +23,8 @@ public class PerSecondTime : MonoBehaviour, IUpdatable
         {
             DataInfo.Instance.CoinCount += (decimal)DataInfo.Instance.PerSecondCoin;
             currentTime = 0f;
+
+            DataInfo.Instance.AllDataRoading();
         }
     }
 

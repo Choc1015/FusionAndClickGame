@@ -17,6 +17,7 @@ public class TrashEvent : MonoBehaviour
         Temp = spriteRenderer.sprite;
         spriteRenderer.sprite = TrashMotion;
         DataInfo.Instance.IsTrash = true;
+        DataInfo.Instance.AllDataRoading();
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -26,5 +27,6 @@ public class TrashEvent : MonoBehaviour
     {
         DataInfo.Instance.IsTrash = false;
         spriteRenderer.sprite = Temp;
+        DataInfo.Instance.AllDataRoading();
     }
 }

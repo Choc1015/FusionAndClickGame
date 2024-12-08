@@ -8,6 +8,7 @@ public class Coin : MonoBehaviour
     {
         AudioManager.Instance.PlayCointSound(); 
         DataInfo.Instance.CoinCount += DataInfo.Instance.ClickDuckCoin;
+        DataInfo.Instance.AllDataRoading();
     }
 
 }

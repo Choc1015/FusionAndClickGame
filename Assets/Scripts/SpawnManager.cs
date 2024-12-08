@@ -56,6 +56,7 @@ public class SpawnManager : Singleton<SpawnManager>
         DataInfo.Instance.ClickDuckCoin += ClickCoint;
         DataInfo.Instance.PerSecondCoin += ClickCoint * 2;
 
+        DataInfo.Instance.AllDataRoading();
 
     }
 
@@ -73,6 +74,7 @@ public class SpawnManager : Singleton<SpawnManager>
         {
             Debug.Log(" 아직 합성을 하지 않은 단계입니다.");
         }
+        DataInfo.Instance.AllDataRoading();
     }
 
     public void ChangeCanvas()
@@ -80,6 +82,8 @@ public class SpawnManager : Singleton<SpawnManager>
         NewDuckImage.texture = DuckImage[DataInfo.Instance.NewDucklevel].texture;
         NewDuckText.text = $"'{DuckImage[DataInfo.Instance.NewDucklevel].name}'를 발견했다!";
         NewDuckCanvas.SetActive(true);
+
+        DataInfo.Instance.AllDataRoading();
     }
 
     //먹이 업그레이드
@@ -90,6 +94,8 @@ public class SpawnManager : Singleton<SpawnManager>
         DataInfo.Instance.CoinCount -= DataInfo.Instance.FeedTimeCost;
         DataInfo.Instance.delayTime = 10 - (DataInfo.Instance.FeedTimeLevel * 0.3f);
         DataInfo.Instance.FeedTimeLevel++;
+
+        DataInfo.Instance.AllDataRoading();
     }
     public void UpgradeDuckCount()
     {
@@ -98,6 +104,8 @@ public class SpawnManager : Singleton<SpawnManager>
         DataInfo.Instance.CoinCount -= DataInfo.Instance.DuckCountCost;
         DataInfo.Instance.DuckCountLevel++;
         DataInfo.Instance.MaxDuckCount ++;
+
+        DataInfo.Instance.AllDataRoading();
     }
 
     public void UpgradeFeedCount()
@@ -107,6 +115,8 @@ public class SpawnManager : Singleton<SpawnManager>
         DataInfo.Instance.CoinCount -= DataInfo.Instance.FeedCountCost;
         DataInfo.Instance.FeedCountLevel++;
         DataInfo.Instance.MaxFeedCount ++;
+
+        DataInfo.Instance.AllDataRoading();
     }
 
 }

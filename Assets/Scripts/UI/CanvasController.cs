@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using TMPro;
 using UnityEngine;
 
 public class CanvasController : MonoBehaviour,IUpdatable
 {
     [SerializeField] GameObject lastCanvas;
+   
+
+
+   
 
     private void OnEnable()
     {
@@ -43,16 +48,20 @@ public class CanvasController : MonoBehaviour,IUpdatable
         lastCanvas.SetActive(false);
         lastCanvas = clickedCanvas;
         lastCanvas.SetActive(true);
+
+        DataInfo.Instance.AllDataRoading();
     }
 
     
     public void OpenPopup(GameObject clickedCanvas)
     {
         clickedCanvas.SetActive(true);
+        DataInfo.Instance.AllDataRoading();
     }
     public void ClosedPopup(GameObject clickedCanvas)
     {
         clickedCanvas.SetActive(false);
+        DataInfo.Instance.AllDataRoading();
     }
 
     public void OnUpdate()
@@ -63,4 +72,6 @@ public class CanvasController : MonoBehaviour,IUpdatable
         }
          
     }
+
+
 }

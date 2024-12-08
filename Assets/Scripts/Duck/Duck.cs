@@ -128,7 +128,7 @@ public class Duck : MonoBehaviour, IUpdatable
     {
         if (Dragging && collision.gameObject.CompareTag("Duck"))
         {
-            
+           
 
             if (collision.gameObject.GetComponent<Duck>().nextDuck == nextDuck)
             {
@@ -155,6 +155,8 @@ public class Duck : MonoBehaviour, IUpdatable
                 ObjectPoolManager.Instance.DeSpawnToPool(collision.gameObject.name, collision.gameObject);
                 CheckNewDuck();
                 DataInfo.Instance.CurrentDuckCount--;
+
+                DataInfo.Instance.AllDataRoading();
             }
         }
     }
@@ -167,6 +169,7 @@ public class Duck : MonoBehaviour, IUpdatable
 
             DataInfo.Instance.NewDucklevel++;
             SpawnManager.Instance.ChangeCanvas();
+
         }
 
         Debug.Log($"{nextDuck}, {DataInfo.Instance.NewDucklevel}");
