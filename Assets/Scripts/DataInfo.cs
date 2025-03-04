@@ -12,9 +12,15 @@ public class GameData
     public int NewDucklevel;
     public int DuckCountLevel;
     public int FeedCountLevel;
-    public int MaxDuckCount = 8;
-    public int CurrentDuckCount = 0;
-    public float delayTime = 10f;
+    public int MaxDuckCount;
+    public int CurrentDuckCount;
+    public float DelayTime;
+}
+
+[System.Serializable]
+public class DuckDataWrapper
+{
+    public List<DuckData> Ducks;        // DuckData 리스트를 감싸는 Wrapper 클래스
 }
 
 public class DataInfo : Singleton<DataInfo>, IUpdatable
@@ -41,7 +47,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
 
     public bool IsGame { get; set; }
     public bool IsDrag { get; set; }
-    public bool IsTrash { get; set; }   
+    public bool IsTrash { get; set; }
     public bool IsDuckSound { get; set; }
 
     public string ClickDuckCoinString = "0"; // string으로 변환하여 표시
@@ -97,7 +103,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
     {
         //ResetData();
         LoadData();
-        duckList = DataInfo.Instance.LoadDuckData();
+        duckList = LoadDuckData();
     }
 
     public void OnUpdate()
@@ -133,8 +139,36 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         PlayerPrefs.SetString("PerSecondCoinString", PerSecondCoinString);
 
         PlayerPrefs.Save();
+        SaveDataServer();
     }
 
+    public void SaveDataServer()
+    {
+        GameData gameData = new GameData
+        {
+            CoinCount = CoinCount,
+            SpawnDuckLevel = SpawnDuckLevel,
+            FeedTimeLevel = FeedTimeLevel,
+            NewDucklevel = NewDucklevel,
+            DuckCountLevel = DuckCountLevel,
+            FeedCountLevel = FeedCountLevel,
+            MaxDuckCount = MaxDuckCount,
+            CurrentDuckCount = CurrentDuckCount,
+            DelayTime = delayTime
+        };
+
+        List<DuckData> duckDataList = duckList.Select(duck => new DuckData
+        {
+            NextDuck = duck.nextDuck,
+            SpriteName = duck.GetComponent<SpriteRenderer>().sprite.name,
+            Position = duck.transform.position
+        }).ToList();
+
+        // 병합된 메서드 호출로 저장
+        FindObjectOfType<ServerDataManager>().SaveDataToServer(gameData, duckDataList);
+    }
+
+   
     public void LoadData()
     {
         CoinCount = decimal.Parse(PlayerPrefs.GetString("CoinCount", "0"));
@@ -150,6 +184,29 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         delayTime = PlayerPrefs.GetFloat("DelayTime", 10f);
         ClickDuckCoinString = PlayerPrefs.GetString("ClickDuckCoinString", "0");
         PerSecondCoinString = PlayerPrefs.GetString("PerSecondCoinString", "0");
+        LoadDataServer();
+    }
+
+    public void LoadDataServer()
+    {
+        FindObjectOfType<ServerDataManager>().LoadDataFromServer((gameData, duckDataList) =>
+        {
+            // GameData 로드
+            CoinCount = gameData.CoinCount;
+            SpawnDuckLevel = gameData.SpawnDuckLevel;
+            FeedTimeLevel = gameData.FeedTimeLevel;
+            NewDucklevel = gameData.NewDucklevel;
+            DuckCountLevel = gameData.DuckCountLevel;
+            FeedCountLevel = gameData.FeedCountLevel;
+            MaxDuckCount = gameData.MaxDuckCount;
+            CurrentDuckCount = gameData.CurrentDuckCount;
+            delayTime = gameData.DelayTime;
+
+            // DuckData 로드
+            duckList = RecreateDucks(duckDataList);
+
+            Debug.Log("Game and Duck data loaded from server.");
+        });
     }
 
     private void OnApplicationQuit()
@@ -169,7 +226,7 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         if (pause)
         {
             SaveData(); // 앱이 일시 정지되었을 때 데이터 저장
-            SaveDuck(); 
+            SaveDuck();
         }
     }
     public void ResetData()
@@ -216,9 +273,12 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         PlayerPrefs.SetInt("CurrentDuckCount", ducks.Count);
         PlayerPrefs.Save();
 
+        duckList = FindObjectsOfType<Duck>().ToList();
+        DataInfo.Instance.SaveDataServer(); // 병합된 메서드 호출
         Debug.Log("Duck data saved: " + json);
     }
 
+    
     [System.Serializable]
     private class DuckDataWrapper
     {
@@ -256,6 +316,22 @@ public class DataInfo : Singleton<DataInfo>, IUpdatable
         Debug.Log("Duck data loaded.");
 
         return ducks;
+    }
+
+    private List<Duck> RecreateDucks(List<DuckData> duckDataList)
+    {
+        return duckDataList.Select(data =>
+        {
+            GameObject duckObj = ObjectPoolManager.Instance.SpawnFromPool("Duck");
+            Duck duck = duckObj.GetComponent<Duck>();
+
+            // Duck 상태 복원
+            duck.nextDuck = data.NextDuck;
+            duckObj.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>($"Sprites/{data.SpriteName}");
+            duckObj.transform.position = data.Position;
+
+            return duck;
+        }).ToList();
     }
 
 
